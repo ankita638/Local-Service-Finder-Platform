@@ -1,4 +1,3 @@
-Of course! Here is a README description for your Local Service Finder project.
 
 Local Service Finder 🌐
 This project is a web-based platform designed to connect users with local service providers. It simplifies the process of finding, booking, and managing local services. The application is built with three distinct modules: User, Service Provider, and Admin, each with its own set of functionalities.
@@ -56,5 +55,6 @@ Go to the GitHub repository.
 Click on Code and then Download ZIP.
 
 Extract the Folder
+
 
 Once the download is complete, extract the ZIP file to your preferred directory.
