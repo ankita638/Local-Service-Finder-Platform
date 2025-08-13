@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Bookings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="max-w-6xl mx-auto bg-white rounded-xl shadow-lg p-6">
+        <h1 class="text-2xl font-bold mb-4 text-gray-800">📅 All Bookings</h1>
+        <table class="w-full border-collapse border border-gray-300">
+            <thead class="bg-gray-200">
+                <tr>
+                    <th class="border border-gray-300 px-4 py-2">ID</th>
+                    <th class="border border-gray-300 px-4 py-2">Customer</th>
+                    <th class="border border-gray-300 px-4 py-2">Provider</th>
+                    <th class="border border-gray-300 px-4 py-2">Service</th>
+                    <th class="border border-gray-300 px-4 py-2">Date</th>
+                    <th class="border border-gray-300 px-4 py-2">Status</th>
+                </tr>
+            </thead>
+            <tbody id="bookingsTable" class="text-gray-700">
+                <tr><td colspan="6" class="text-center py-4">Loading...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        async function loadBookings() {
+            try {
+                const res = await fetch('/api/bookings'); // Your backend endpoint
+                if (!res.ok) throw new Error("Failed to fetch bookings");
+                
+                const bookings = await res.json();
+                const tableBody = document.getElementById('bookingsTable');
+                tableBody.innerHTML = '';
+
+                if (bookings.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="6" class="text-center py-4">No bookings found</td></tr>`;
+                    return;
+                }
+
+                bookings.forEach(b => {
+                    const row = `
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">${b.id}</td>
+                            <td class="border border-gray-300 px-4 py-2">${b.customer?.name || ''}</td>
+                            <td class="border border-gray-300 px-4 py-2">${b.provider?.name || ''}</td>
+                            <td class="border border-gray-300 px-4 py-2">${b.service?.name || ''}</td>
+                            <td class="border border-gray-300 px-4 py-2">${b.date || ''}</td>
+                            <td class="border border-gray-300 px-4 py-2">${b.status || ''}</td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += row;
+                });
+            } catch (err) {
+                document.getElementById('bookingsTable').innerHTML =
+                    `<tr><td colspan="6" class="text-center text-red-500 py-4">Error loading bookings</td></tr>`;
+                console.error(err);
+            }
+        }
+
+        loadBookings();
+    </script>
+</body>
+</html>

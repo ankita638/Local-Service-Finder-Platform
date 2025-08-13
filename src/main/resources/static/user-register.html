@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Register</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #89f7fe, #66a6ff); /* beautiful blue gradient */
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 20px;
+    }
+
+    .register-box {
+      display: flex;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      max-width: 750px;
+      width: 100%;
+    }
+
+    .left-image {
+      flex: 1;
+      background: url('images/signup.jpg') no-repeat center center;
+      background-size: cover;
+      background-color: #e0f7fa;
+      min-height: 350px;
+    }
+
+    .form-section {
+      flex: 1;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .form-section h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .form-section input {
+      padding: 10px;
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+      width: 100%;
+    }
+
+    .form-section button {
+      padding: 12px;
+      background: #2196f3;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .form-section button:hover {
+      background: #1976d2;
+    }
+
+    #registerMessage {
+      margin-top: 10px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    @media screen and (max-width: 768px) {
+      .register-box {
+        flex-direction: column;
+        max-width: 90%;
+      }
+      .left-image {
+        height: 200px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="register-box">
+    <div class="left-image"></div>
+    <div class="form-section">
+      <h2>User Registration</h2>
+      <input type="text" id="name" placeholder="Name">
+      <input type="text" id="email" placeholder="Email">
+      <input type="password" id="password" placeholder="Password">
+      <input type="text" id="phone" placeholder="Phone">
+      <input type="text" id="location" placeholder="Location">
+      <button onclick="registerUser()">Register</button>
+      <p id="registerMessage" style="color:red;"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+function registerUser() {
+    const user = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        password: document.getElementById('password').value,
+        phone: document.getElementById('phone').value,
+        location: document.getElementById('location').value
+    };
+
+    fetch('/api/users/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(user)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to register');
+        }
+        return response.json();
+    })
+    .then(data => {
+        document.getElementById('registerMessage').style.color = 'green';
+        document.getElementById('registerMessage').textContent = 'Registration successful! Redirecting...';
+        setTimeout(() => window.location.href = 'user-login.html', 2000);
+    })
+    .catch(error => {
+        document.getElementById('registerMessage').textContent = 'Registration failed';
+    });
+}
+</script>
+
+</body>
+</html>

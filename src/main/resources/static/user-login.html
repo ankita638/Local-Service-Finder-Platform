@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Login</title>
+
+  <!-- Font Awesome for user icon -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #dbeafe, #f0fdf4);
+    }
+
+    .container {
+      display: flex;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .image-section, .form-section {
+      width: 45%;
+      max-width: 500px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .image-section img {
+      width: 100%;
+      height: auto;
+      max-height: 400px;
+      border-radius: 12px;
+      object-fit: cover;
+    }
+
+    .form-section {
+      background-color: #ffffffdd;
+      border-radius: 12px;
+    }
+
+    form {
+      background-color: #ffffff;
+      padding: 30px 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 320px;
+      text-align: center;
+    }
+
+    .icon {
+      font-size: 50px;
+      color: #0077cc;
+      margin: 10px 0;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 22px;
+      color: #0077cc;
+    }
+
+    h1 {
+      margin: 5px 0 5px;
+      font-size: 24px;
+      color: #333;
+    }
+
+    p {
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: #666;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      background-color: #0077cc;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #005fa3;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- Left: Image Section -->
+    <div class="image-section">
+      <img src="images/loginfinal.jpg" alt="Login Illustration">
+    </div>
+
+    <!-- Right: Login Form Section -->
+    <div class="form-section">
+      <form id="loginForm">
+        <!-- 👤 User Icon -->
+        <div class="icon">
+          <i class="fas fa-user-circle"></i>
+        </div>
+
+        <!-- 🟦 Welcome -->
+        <h2>Welcome</h2>
+
+        <!-- 🔐 Login -->
+        <h1>Login</h1>
+
+        <!-- ✏️ Details -->
+        <p>Please enter your details to continue.</p>
+
+        <!-- 📧 Email -->
+        <input type="email" id="email" placeholder="Email" required />
+
+        <!-- 🔒 Password -->
+        <input type="password" id="password" placeholder="Password" required />
+
+        <!-- 🔘 Submit -->
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- JavaScript for login -->
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      try {
+        const response = await fetch(`/api/users/login?email=${email}&password=${password}`, {
+          method: "POST"
+        });
+
+        const text = await response.text();
+
+        if (text === "Login Successful") {
+          const userResponse = await fetch(`/api/admin/users`);
+          if (!userResponse.ok) {
+            alert("Login ok but unable to fetch user details.");
+            return;
+          }
+
+          const users = await userResponse.json();
+          const currentUser = users.find(u => u.email === email);
+
+          if (currentUser) {
+            localStorage.setItem("currentUser", JSON.stringify(currentUser));
+            window.location.href = "user-dashboard.html";
+          } else {
+            alert("Login ok but user not found.");
+          }
+        } else {
+          alert("Invalid credentials");
+        }
+      } catch (e) {
+        console.error("Error:", e);
+        alert("Something went wrong. Please try again.");
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Provider Dashboard</title>
+<style>
+  body,html{margin:0;padding:0;height:100%;font-family:sans-serif;background:#e6f2ea;display:flex}
+  .sidebar{
+    width:220px; background:linear-gradient(180deg,#2e8b57,#27914a);
+    color:#fff; display:flex; flex-direction: column; align-items:center; padding:20px; box-shadow:2px 0 6px rgba(0,0,0,0.15);
+  }
+  .logo{
+    background:#fff; color:#2e8b57; font-weight:700; font-size:36px;
+    border-radius:50%; width:70px; height:70px; display:flex; justify-content:center; align-items:center; margin-bottom:15px;
+    box-shadow:0 3px 10px rgba(0,0,0,0.1);
+  }
+  .welcome{margin-bottom:30px; font-weight:600; font-size:18px; text-align:center;}
+  .nav-btn{
+    background:rgba(255 255 255 / 0.15); border:none; padding:12px 16px; width:100%;
+    margin-bottom:12px; color:#fff; font-size:16px; cursor:pointer; border-radius:8px;
+    display:flex; align-items:center; gap:8px; justify-content:center;
+    transition: background 0.2s ease;
+  }
+  .nav-btn:hover{background:rgba(255 255 255 / 0.3);}
+  .main{
+    flex:1; padding:40px; color:#2e3a2e; display:flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align:center;
+  }
+  .main h1{
+    font-size:36px; margin-bottom:16px; color:#2e8b57;
+  }
+  .main p{
+    font-size:18px; color:#3ca374; max-width:400px;
+  }
+  .sidebar-footer{
+    margin-top:auto; font-size:12px; color:#b7d1b7; text-align:center; user-select:none;
+  }
+</style>
+</head>
+<body>
+
+  <aside class="sidebar" role="navigation" aria-label="Sidebar">
+    <div class="logo">LS</div>
+    <div class="welcome">Welcome, Provider</div>
+
+    <button class="nav-btn" onclick="window.location.href='add-service.html'">➕ Add Service</button>
+    <button class="nav-btn" onclick="window.location.href='provider-newbook.html'">📋 View Bookings</button>
+    <button class="nav-btn" onclick="window.location.href='review.html'">⭐ View All Reviews</button>
+    <button class="nav-btn" onclick="logout()">🚪 Logout</button>
+
+    <div class="sidebar-footer">Local Service Finder • Dashboard</div>
+  </aside>
+
+  <main class="main">
+    <h1>Welcome to Your Dashboard</h1>
+    <p>Use the sidebar buttons to manage your services, view bookings, and check reviews.</p>
+  </main>
+
+<script>
+function logout(){
+  window.location.href = 'provider-register.html';
+}
+</script>
+
+</body>
+</html>

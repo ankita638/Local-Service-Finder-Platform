@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Book Service</title>
+<style>
+  /* Reset and base */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f4f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+  }
+
+  form {
+    background: white;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+  }
+
+  h2 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 25px;
+    font-weight: 700;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 6px;
+    color: #34495e;
+    font-weight: 600;
+  }
+
+  select, input[type="date"], input[type="email"] {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 20px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+
+  select:focus, input[type="date"]:focus, input[type="email"]:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 8px rgba(52,152,219,0.3);
+  }
+
+  button {
+    width: 100%;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 14px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  button:hover {
+    background-color: #2980b9;
+  }
+
+  @media (max-width: 450px) {
+    form {
+      padding: 20px;
+    }
+  }
+</style>
+</head>
+<body>
+  <form id="bookingForm" novalidate>
+    <h2>Book a Service</h2>
+
+    <label for="service">Select Service:</label>
+    <select id="service" name="serviceId" required>
+      <option value="">-- Select a Service --</option>
+    </select>
+
+    <label for="date">Select Date:</label>
+    <input type="date" id="date" name="date" required />
+
+    <label for="email">Your Email:</label>
+    <input type="email" id="email" name="customerEmail" required placeholder="you@example.com" />
+
+    <button type="submit">Book Service</button>
+  </form>
+
+  <script>
+    // Fetch services to populate dropdown
+    fetch('/api/services')
+      .then(response => response.json())
+      .then(services => {
+        const serviceSelect = document.getElementById('service');
+        services.forEach(service => {
+          const option = document.createElement('option');
+          option.value = service.id;
+          option.textContent = service.name + ' (' + service.category + ')';
+          serviceSelect.appendChild(option);
+        });
+      })
+      .catch(() => alert('Failed to load services'));
+
+    // Handle booking form submit
+    document.getElementById('bookingForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const serviceId = document.getElementById('service').value;
+      const date = document.getElementById('date').value;
+      const customerEmail = document.getElementById('email').value.trim();
+
+      if (!serviceId || !date || !customerEmail) {
+        alert('Please fill all fields');
+        return;
+      }
+
+      const url = `/api/bookings/book?serviceId=${encodeURIComponent(serviceId)}&date=${encodeURIComponent(date)}&customerEmail=${encodeURIComponent(customerEmail)}`;
+
+      fetch(url, { method: 'POST' })
+        .then(response => {
+          if (response.ok) {
+            alert('Booking successful!');
+            this.reset();
+          } else {
+            alert('Booking failed. Please check your details.');
+          }
+        })
+        .catch(() => alert('Error occurred while booking'));
+    });
+  </script>
+</body>
+</html>

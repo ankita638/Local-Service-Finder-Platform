@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>All Services</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #fff9e6;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #444;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .card {
+      background: #fff4cc;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: box-shadow 0.3s ease;
+    }
+    .card:hover {
+      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    }
+    .service-name {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #7a4e16;
+    }
+    .service-category {
+      font-style: italic;
+      color: #a67c00;
+      margin-bottom: 10px;
+    }
+    .service-description {
+      font-size: 16px;
+      margin-bottom: 12px;
+      color: #555;
+      min-height: 48px;
+    }
+    .service-price {
+      font-weight: 600;
+      color: #4a4a4a;
+      margin-bottom: 6px;
+    }
+    .service-provider {
+      font-size: 14px;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Available Services</h1>
+
+<div class="grid" id="servicesGrid">
+  <!-- Cards will be injected here -->
+</div>
+
+<script>
+  async function loadServices() {
+    try {
+      const res = await fetch('/api/services');
+      if (!res.ok) throw new Error('Failed to fetch services');
+      const services = await res.json();
+      const grid = document.getElementById('servicesGrid');
+
+      services.forEach(service => {
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        const providerName = service.provider ? service.provider.name : 'No Provider';
+
+        card.innerHTML = `
+          <div class="service-name">${service.name}</div>
+          <div class="service-category">${service.category}</div>
+          <div class="service-description">${service.description ? service.description : 'No description available.'}</div>
+          <div class="service-price">Price: ₹${service.price ? service.price.toFixed(2) : 'N/A'}</div>
+          <div class="service-provider">Provider: ${providerName}</div>
+        `;
+
+        grid.appendChild(card);
+      });
+    } catch (err) {
+      console.error(err);
+      document.getElementById('servicesGrid').textContent = 'Failed to load services.';
+    }
+  }
+
+  loadServices();
+</script>
+
+</body>
+</html>

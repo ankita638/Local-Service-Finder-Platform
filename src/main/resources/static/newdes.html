@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Book a Service</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #d4f5e3, #a8e6cf);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .form-container {
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 450px;
+    }
+    h2 {
+      text-align: center;
+      color: #2e8b57;
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: 600;
+      margin-top: 10px;
+      display: block;
+      color: #333;
+    }
+    select, input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.3s ease;
+    }
+    select:focus, input:focus {
+      border-color: #2e8b57;
+      outline: none;
+    }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background-color: #2e8b57;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background-color: #246b44;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <h2>Book a Service</h2>
+    <form id="bookingForm">
+      <!-- Select Service Category -->
+      <label>Service Category:</label>
+      <select id="serviceCategory" required>
+        <option value="">-- Select Category --</option>
+        <option value="plumber">Plumber</option>
+        <option value="electrician">Electrician</option>
+        <option value="carpenter">Carpenter</option>
+      </select>
+
+      <!-- Select Service Provider -->
+      <label>Service Provider:</label>
+      <select id="serviceProvider" required>
+        <option value="">-- Select Provider --</option>
+      </select>
+
+      <!-- Booking Date -->
+      <label>Booking Date:</label>
+      <input type="date" id="date" required>
+
+      <!-- Submit -->
+      <button type="submit">Book Now</button>
+    </form>
+  </div>
+
+  <script>
+    // Providers with location shown beside name
+    const providers = {
+      plumber: [
+        { name: "John's Plumbing", location: "Kolkata" },
+        { name: "Fix-It Fast", location: "Bardhaman" }
+      ],
+      electrician: [
+        { name: "Bright Sparks", location: "Howrah" },
+        { name: "Safe Current", location: "Durgapur" }
+      ],
+      carpenter: [
+        { name: "Wood Masters", location: "Asansol" },
+        { name: "Fine Finish Carpentry", location: "Siliguri" }
+      ]
+    };
+
+    // Populate provider dropdown when category changes
+    document.getElementById("serviceCategory").addEventListener("change", function () {
+      const category = this.value;
+      const providerSelect = document.getElementById("serviceProvider");
+      providerSelect.innerHTML = '<option value="">-- Select Provider --</option>';
+
+      if (category && providers[category]) {
+        providers[category].forEach(provider => {
+          const option = document.createElement("option");
+          option.value = provider.name;
+          option.textContent = `${provider.name} (${provider.location})`;
+          providerSelect.appendChild(option);
+        });
+      }
+    });
+
+    // Booking submit
+    document.getElementById("bookingForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const serviceCategory = document.getElementById("serviceCategory").value;
+      const serviceProvider = document.getElementById("serviceProvider").selectedOptions[0].text;
+      const date = document.getElementById("date").value;
+
+      alert(`✅ Booking Confirmed!\nCategory: ${serviceCategory}\nProvider: ${serviceProvider}\nDate: ${date}`);
+      this.reset();
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Provider Bookings by Email</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    label, input, button { margin: 5px 0; display: block; width: 300px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 15px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #f4f4f4; }
+    #message { margin-top: 10px; color: red; }
+  </style>
+</head>
+<body>
+
+  <h2>View Bookings by Provider Email</h2>
+
+  <label for="providerEmail">Provider Email:</label>
+  <input type="email" id="providerEmail" placeholder="Enter provider's email" />
+
+  <button onclick="fetchBookings()">Get Bookings</button>
+
+  <div id="message"></div>
+
+  <table id="bookingsTable" style="display:none;">
+    <thead>
+      <tr>
+        <th>Booking ID</th>
+        <th>Customer Name</th>
+        <th>Service Name</th>
+        <th>Date</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="bookingsBody"></tbody>
+  </table>
+
+  <script>
+    async function fetchBookings() {
+      const email = document.getElementById('providerEmail').value.trim();
+      const messageDiv = document.getElementById('message');
+      const table = document.getElementById('bookingsTable');
+      const tbody = document.getElementById('bookingsBody');
+      messageDiv.textContent = '';
+      tbody.innerHTML = '';
+      table.style.display = 'none';
+
+      if (!email) {
+        messageDiv.textContent = 'Please enter a provider email.';
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/bookings/provider/email?email=${encodeURIComponent(email)}`);
+        if (!response.ok) {
+          const err = await response.json();
+          messageDiv.textContent = 'Error: ' + (err.message || response.statusText);
+          return;
+        }
+
+        const bookings = await response.json();
+
+        if (bookings.length === 0) {
+          messageDiv.textContent = 'No bookings found for this provider.';
+          return;
+        }
+
+        bookings.forEach(booking => {
+          const row = document.createElement('tr');
+
+          const idCell = document.createElement('td');
+          idCell.textContent = booking.id;
+          row.appendChild(idCell);
+
+          const customerCell = document.createElement('td');
+          customerCell.textContent = booking.customer?.name || 'N/A';
+          row.appendChild(customerCell);
+
+          const serviceCell = document.createElement('td');
+          serviceCell.textContent = booking.service?.name || 'N/A';
+          row.appendChild(serviceCell);
+
+          const dateCell = document.createElement('td');
+          dateCell.textContent = booking.date;
+          row.appendChild(dateCell);
+
+          const statusCell = document.createElement('td');
+          statusCell.textContent = booking.status;
+          row.appendChild(statusCell);
+
+          tbody.appendChild(row);
+        });
+
+        table.style.display = 'table';
+
+      } catch (error) {
+        messageDiv.textContent = 'Error fetching bookings: ' + error.message;
+      }
+    }
+  </script>
+
+</body>
+</html>

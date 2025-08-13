@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Submit Review</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #e0f7ec, #a8e6cf);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .review-container {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 450px;
+      box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #2e8b57;
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: 600;
+      display: block;
+      margin: 10px 0 5px;
+      color: #333;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #d1d1d1;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-bottom: 15px;
+      transition: border-color 0.3s ease;
+    }
+    input:focus, textarea:focus {
+      border-color: #2e8b57;
+      outline: none;
+    }
+    textarea {
+      resize: none;
+      height: 80px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #2e8b57;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background-color: #246b44;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="review-container">
+    <h2>Submit Your Review</h2>
+    <form id="reviewForm">
+      <label>Your Name:</label>
+      <input type="text" id="name" placeholder="Enter your name" required />
+
+      <label>Rating (1-5):</label>
+      <input type="number" id="rating" min="1" max="5" required />
+
+      <label>Comment:</label>
+      <textarea id="comment" placeholder="Write your review here..." required></textarea>
+
+      <button type="submit">Submit Review</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("reviewForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const data = {
+        name: document.getElementById("name").value.trim(),
+        rating: parseInt(document.getElementById("rating").value),
+        comment: document.getElementById("comment").value.trim()
+      };
+
+      try {
+        const response = await fetch("/api/reviews", { // ✅ Relative path (no port)
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+          alert("✅ Review submitted successfully!");
+          this.reset();
+        } else {
+          alert("❌ Failed to submit review.");
+        }
+      } catch (error) {
+        alert("⚠ Error submitting review: " + error.message);
+      }
+    });
+  </script>
+
+</body>
+</html>

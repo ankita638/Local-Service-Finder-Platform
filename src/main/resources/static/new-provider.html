@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Provider Dashboard</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    h1, h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      text-shadow: 0 0 5px rgba(0,0,0,0.4);
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: rgba(255 255 255 / 0.1);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: 600;
+      color: #e0e0e0;
+    }
+    input, select, button, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border-radius: 6px;
+      border: none;
+      font-size: 1rem;
+    }
+    input, select, textarea {
+      background: rgba(255 255 255 / 0.9);
+      color: #333;
+    }
+    button {
+      background: #ff6f61;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      margin-top: 15px;
+    }
+    button:hover {
+      background: #e85c4d;
+    }
+    .section {
+      margin-bottom: 40px;
+      border-bottom: 1px solid rgba(255 255 255 / 0.3);
+      padding-bottom: 20px;
+    }
+    .services-list {
+      margin-top: 15px;
+      background: rgba(255 255 255 / 0.2);
+      padding: 10px;
+      border-radius: 6px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .service-item {
+      background: rgba(255 255 255 / 0.3);
+      margin-bottom: 8px;
+      padding: 8px;
+      border-radius: 4px;
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <h1>Provider Dashboard</h1>
+
+    <!-- Register -->
+    <section class="section" id="register-section">
+      <h2>Register Provider</h2>
+      <form id="registerForm">
+        <label for="reg-name">Name</label>
+        <input type="text" id="reg-name" required />
+        
+        <label for="reg-email">Email</label>
+        <input type="email" id="reg-email" required />
+        
+        <label for="reg-password">Password</label>
+        <input type="password" id="reg-password" required />
+
+        <label for="reg-location">Location</label>
+        <input type="text" id="reg-location" required />
+
+        <button type="submit">Register</button>
+      </form>
+      <p id="registerMsg"></p>
+    </section>
+
+    <!-- Login -->
+    <section class="section" id="login-section">
+      <h2>Login Provider</h2>
+      <form id="loginForm">
+        <label for="login-email">Email</label>
+        <input type="email" id="login-email" required />
+        
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" required />
+
+        <button type="submit">Login</button>
+      </form>
+      <p id="loginMsg"></p>
+    </section>
+
+    <!-- Add Service -->
+    <section class="section" id="service-section" style="display:none;">
+      <h2>Add Service</h2>
+      <form id="serviceForm">
+        <label for="service-name">Service Name</label>
+        <input type="text" id="service-name" required />
+
+        <label for="service-category">Category</label>
+        <input type="text" id="service-category" required />
+
+        <label for="service-description">Description</label>
+        <textarea id="service-description" rows="3"></textarea>
+
+        <label for="service-price">Price</label>
+        <input type="number" id="service-price" min="0" step="0.01" required />
+
+        <button type="submit">Add Service</button>
+      </form>
+      <p id="serviceMsg"></p>
+
+      <h3>Your Services</h3>
+      <div id="servicesList" class="services-list"></div>
+    </section>
+
+  </div>
+
+<script>
+  let loggedInProviderId = null;
+
+  // Register provider
+  document.getElementById('registerForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const provider = {
+      name: document.getElementById('reg-name').value,
+      email: document.getElementById('reg-email').value,
+      password: document.getElementById('reg-password').value,
+      location: document.getElementById('reg-location').value
+    };
+
+    fetch('/api/providers/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(provider)
+    })
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('registerMsg').textContent = 'Registered successfully! Please login.';
+      document.getElementById('registerForm').reset();
+    })
+    .catch(err => {
+      document.getElementById('registerMsg').textContent = 'Registration failed!';
+      console.error(err);
+    });
+  });
+
+  // Login provider
+  document.getElementById('loginForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+
+    fetch(`/api/providers/login?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`, {
+      method: 'POST'
+    })
+    .then(res => res.text())
+    .then(text => {
+      document.getElementById('loginMsg').textContent = text;
+      if (text === 'Login Successful') {
+        // Save provider id by fetching user details (you may have to implement this)
+        // For demo, we assume email is unique and call /api/providers endpoint to find provider ID
+        fetch('/api/providers')
+          .then(res => res.json())
+          .then(providers => {
+            const provider = providers.find(p => p.email === email);
+            if (provider) {
+              loggedInProviderId = provider.id;
+              document.getElementById('service-section').style.display = 'block';
+              loadServices();
+            }
+          });
+        document.getElementById('loginForm').reset();
+      }
+    })
+    .catch(err => {
+      document.getElementById('loginMsg').textContent = 'Login failed!';
+      console.error(err);
+    });
+  });
+
+  // Add service
+  document.getElementById('serviceForm').addEventListener('submit', e => {
+    e.preventDefault();
+    if (!loggedInProviderId) {
+      alert('Please login first!');
+      return;
+    }
+    const service = {
+      name: document.getElementById('service-name').value,
+      category: document.getElementById('service-category').value,
+      description: document.getElementById('service-description').value,
+      price: parseFloat(document.getElementById('service-price').value)
+    };
+
+    fetch(`/api/providers/${loggedInProviderId}/services`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(service)
+    })
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('serviceMsg').textContent = 'Service added successfully!';
+      document.getElementById('serviceForm').reset();
+      loadServices();
+    })
+    .catch(err => {
+      document.getElementById('serviceMsg').textContent = 'Failed to add service!';
+      console.error(err);
+    });
+  });
+
+  // Load services for logged in provider
+  function loadServices() {
+    fetch(`/api/providers/${loggedInProviderId}/services`)
+      .then(res => res.json())
+      .then(services => {
+        const listDiv = document.getElementById('servicesList');
+        listDiv.innerHTML = '';
+        if (services.length === 0) {
+          listDiv.textContent = 'No services found.';
+          return;
+        }
+        services.forEach(s => {
+          const div = document.createElement('div');
+          div.className = 'service-item';
+          div.textContent = `${s.name} — ${s.category} — $${s.price.toFixed(2)}`;
+          listDiv.appendChild(div);
+        });
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  }
+</script>
+
+</body>
+</html>

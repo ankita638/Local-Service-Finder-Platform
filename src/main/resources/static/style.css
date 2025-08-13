@@ -1,0 +1,56 @@
+/* Reset */
+body { margin: 0; font-family: Arial, sans-serif; background: #f5f7fa; color: #333; }
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; }
+
+/* Navbar */
+.navbar {
+  background: teal; color: white;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 20px;
+}
+.navbar a { color: white; margin: 0 10px; }
+
+/* Hero section */
+.hero {
+  background: url('../images/hero.jpg') center/cover no-repeat;
+  height: 60vh; display: flex; align-items: center; justify-content: center;
+}
+.hero-overlay {
+  background: rgba(0,0,0,0.5); padding: 20px; text-align: center; color: white; width: 100%;
+}
+.hero-overlay input {
+  padding: 10px; width: 250px; border: none; border-radius: 4px;
+}
+.hero-overlay button {
+  padding: 10px 20px; margin-left: 5px; background: orange; color: white; border: none; border-radius: 4px;
+}
+
+/* Cards and grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+  gap: 20px; padding: 20px;
+}
+.card {
+  background: white; padding: 20px; border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center;
+}
+
+/* Centered forms */
+.form-container {
+  max-width: 400px; margin: 50px auto; background: white; padding: 20px;
+  border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.form-container h2 { text-align: center; margin-bottom: 20px; }
+.form-container input {
+  width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px;
+}
+.form-container button {
+  width: 100%; padding: 10px; background: teal; color: white; border: none; border-radius: 4px;
+}
+
+/* Tables */
+.table-container { padding: 20px; }
+table { width: 100%; border-collapse: collapse; background: white; }
+th, td { padding: 10px; border-bottom: 1px solid #ddd; text-align: left; }

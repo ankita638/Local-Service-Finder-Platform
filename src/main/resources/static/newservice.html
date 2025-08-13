@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Manage Services</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 20px;
+    background: #eef2f7;
+    color: #333;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 25px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+  }
+  th, td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+  }
+  th {
+    background: #007bff;
+    color: white;
+  }
+  tr:hover {
+    background: #f1f9ff;
+  }
+  button {
+    background: #007bff;
+    border: none;
+    color: white;
+    padding: 6px 12px;
+    margin-right: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+  button.delete {
+    background: #dc3545;
+  }
+  button:hover {
+    opacity: 0.9;
+  }
+  form {
+    max-width: 500px;
+    background: white;
+    padding: 20px;
+    margin: 0 auto 40px auto;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+  }
+  form label {
+    display: block;
+    margin-top: 10px;
+    font-weight: 600;
+  }
+  form input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+  form button {
+    margin-top: 20px;
+    width: 100%;
+  }
+  a.bookings-link {
+    display: block;
+    max-width: 500px;
+    margin: 0 auto 20px auto;
+    text-align: center;
+    font-weight: 600;
+    color: #007bff;
+    text-decoration: none;
+  }
+  a.bookings-link:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+
+<h1>Manage Services</h1>
+
+<a href="/bookings.html" class="bookings-link">View All Bookings</a>
+
+<table id="servicesTable">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Category</th>
+      <th>Description</th>
+      <th>Provider</th>
+      <th>Price</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Services will be populated here -->
+  </tbody>
+</table>
+
+<form id="serviceForm">
+  <h2 id="formTitle">Add New Service</h2>
+
+  <label for="serviceName">Name</label>
+  <input type="text" id="serviceName" required />
+
+  <label for="serviceCategory">Category</label>
+  <input type="text" id="serviceCategory" required />
+
+  <label for="serviceDescription">Description</label>
+  <input type="text" id="serviceDescription" required />
+
+  <label for="serviceProviderId">Provider ID (number)</label>
+  <input type="number" id="serviceProviderId" placeholder="Enter provider ID or leave blank" />
+
+  <label for="servicePrice">Price</label>
+  <input type="number" id="servicePrice" min="0" step="0.01" required />
+
+  <button type="submit">Save Service</button>
+  <button type="button" id="cancelEditBtn" style="display:none; margin-top:10px; background:#6c757d;">Cancel Edit</button>
+</form>
+
+<script>
+  let services = [];
+  let editingServiceId = null;
+
+  const tableBody = document.querySelector('#servicesTable tbody');
+  const form = document.getElementById('serviceForm');
+  const formTitle = document.getElementById('formTitle');
+  const cancelEditBtn = document.getElementById('cancelEditBtn');
+
+  function loadServices() {
+    fetch('/api/services')
+      .then(res => res.json())
+      .then(data => {
+        services = data;
+        renderTable();
+      })
+      .catch(err => alert('Failed to load services.'));
+  }
+
+  function renderTable() {
+    tableBody.innerHTML = '';
+    if (services.length === 0) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = '<td colspan="7" style="text-align:center;">No services found.</td>';
+      tableBody.appendChild(tr);
+      return;
+    }
+    services.forEach(s => {
+      const providerName = s.provider && s.provider.name ? s.provider.name : 'N/A';
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${s.id}</td>
+        <td>${s.name}</td>
+        <td>${s.category}</td>
+        <td>${s.description}</td>
+        <td>${providerName}</td>
+        <td>${s.price.toFixed(2)}</td>
+        <td>
+          <button onclick="editService(${s.id})">Edit</button>
+          <button class="delete" onclick="deleteService(${s.id})">Delete</button>
+        </td>
+      `;
+      tableBody.appendChild(tr);
+    });
+  }
+
+  function deleteService(id) {
+    if (!confirm('Are you sure you want to delete this service?')) return;
+    fetch(`/api/services/${id}`, { method: 'DELETE' })
+      .then(res => {
+        if (res.ok) {
+          alert('Deleted successfully');
+          loadServices();
+        } else {
+          alert('Failed to delete');
+        }
+      })
+      .catch(() => alert('Error deleting service'));
+  }
+
+  function editService(id) {
+    const svc = services.find(s => s.id === id);
+    if (!svc) return;
+    editingServiceId = id;
+    formTitle.textContent = 'Edit Service ID: ' + id;
+    document.getElementById('serviceName').value = svc.name;
+    document.getElementById('serviceCategory').value = svc.category;
+    document.getElementById('serviceDescription').value = svc.description || '';
+    document.getElementById('serviceProviderId').value = svc.provider ? svc.provider.id : '';
+    document.getElementById('servicePrice').value = svc.price;
+    cancelEditBtn.style.display = 'block';
+  }
+
+  cancelEditBtn.addEventListener('click', () => {
+    resetForm();
+  });
+
+  function resetForm() {
+    editingServiceId = null;
+    formTitle.textContent = 'Add New Service';
+    form.reset();
+    cancelEditBtn.style.display = 'none';
+  }
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+
+    const newService = {
+      name: document.getElementById('serviceName').value.trim(),
+      category: document.getElementById('serviceCategory').value.trim(),
+      description: document.getElementById('serviceDescription').value.trim(),
+      price: parseFloat(document.getElementById('servicePrice').value),
+      provider: null
+    };
+    const provIdVal = document.getElementById('serviceProviderId').value.trim();
+    if (provIdVal) {
+      newService.provider = { id: Number(provIdVal) };
+    }
+
+    if (editingServiceId) {
+      fetch(`/api/services/${editingServiceId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newService)
+      })
+      .then(res => {
+        if (res.ok) {
+          alert('Service updated!');
+          loadServices();
+          resetForm();
+        } else {
+          alert('Failed to update service');
+        }
+      })
+      .catch(() => alert('Error updating service'));
+    } else {
+      fetch('/api/services', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newService)
+      })
+      .then(res => {
+        if (res.ok) {
+          alert('Service added!');
+          loadServices();
+          resetForm();
+        } else {
+          alert('Failed to add service');
+        }
+      })
+      .catch(() => alert('Error adding service'));
+    }
+  });
+
+  loadServices();
+</script>
+
+</body>
+</html>

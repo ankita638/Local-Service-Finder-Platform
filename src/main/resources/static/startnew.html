@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Local Service Finder - Start</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      display: flex;
+      height: 100vh;
+      background: linear-gradient(to right, #dbeafe, #f0fdf4);
+    }
+
+    .sidebar {
+      width: 220px;
+      background: #1e293b;
+      color: white;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .sidebar h2 {
+      font-size: 22px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .nav-item:hover {
+      background-color: #334155;
+      padding: 6px;
+      border-radius: 8px;
+    }
+
+    .main {
+      flex: 1;
+      padding: 40px;
+      overflow-y: auto;
+    }
+
+    .main h1 {
+      font-size: 28px;
+      color: #0f172a;
+      margin-bottom: 20px;
+    }
+
+    .service {
+      margin-bottom: 25px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .service h2 {
+      font-size: 22px;
+      color: #1e293b;
+      margin-bottom: 10px;
+    }
+
+    .service p {
+      font-size: 15px;
+      color: #475569;
+      margin-bottom: 10px;
+    }
+
+    select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #94a3b8;
+      border-radius: 8px;
+      background: #f8fafc;
+      font-size: 14px;
+    }
+
+    select option {
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>👋 Welcome</h2>
+    <div class="nav-item">🏠 Home</div>
+    <div class="nav-item">🧰 Services</div>
+    <div class="nav-item">📋 Bookings</div>
+    <div class="nav-item">🔒 Change Password</div>
+    <div class="nav-item">❓ Help</div>
+    <div class="nav-item">🔓 Logout</div>
+  </div>
+
+  <div class="main">
+    <h1>Local Service Finder</h1>
+
+    <div class="service">
+      <h2>🔌 Electrician Services</h2>
+      <p>Expert electrical installations, fan repairs, fuse fixing and more.</p>
+      <select>
+        <option>Mr. Rakesh Kumar - +91 98765 43210</option>
+        <option>Mr. Suresh Singh - +91 90112 33445</option>
+        <option>Ms. Priya Das - +91 92345 66778</option>
+      </select>
+    </div>
+
+    <div class="service">
+      <h2>🚿 Plumber Services</h2>
+      <p>Leak repairs, tap fitting, and complete plumbing solutions.</p>
+      <select>
+        <option>Mr. Ajay Verma - +91 91234 56789</option>
+        <option>Mr. Rohit Sharma - +91 98765 12345</option>
+        <option>Ms. Pooja Yadav - +91 99887 11223</option>
+      </select>
+    </div>
+
+    <div class="service">
+      <h2>🧹 Sweeper Services</h2>
+      <p>Professional house cleaning, society sweeping, and sanitation work.</p>
+      <select>
+        <option>Mrs. Neha Sharma - +91 90123 45678</option>
+        <option>Ms. Kavita Patel - +91 97788 66554</option>
+        <option>Mr. Ramu Kumar - +91 93456 77889</option>
+      </select>
+    </div>
+
+    <div class="service">
+      <h2>🛠️ Mechanic Services</h2>
+      <p>Two-wheeler and four-wheeler on-site repair and maintenance support.</p>
+      <select>
+        <option>Mr. Kunal Yadav - +91 99887 76655</option>
+        <option>Mr. Tarun Mehta - +91 97654 43210</option>
+        <option>Ms. Anjali Singh - +91 93567 88099</option>
+      </select>
+    </div>
+  </div>
+</body>
+</html>

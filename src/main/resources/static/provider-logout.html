@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Logout - Local Service Finder</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #e0f7fa, #ffffff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .logout-box {
+      background-color: #ffffff;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .logout-box h1 {
+      color: #1f2937;
+      font-size: 26px;
+      margin-bottom: 10px;
+    }
+
+    .logout-box p {
+      color: #4b5563;
+      margin-bottom: 30px;
+      font-size: 16px;
+    }
+
+    .logout-box button {
+      background-color: #10b981;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .logout-box button:hover {
+      background-color: #059669;
+    }
+
+    .icon {
+      font-size: 50px;
+      margin-bottom: 20px;
+      color: #10b981;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="logout-box">
+    <div class="icon">👋</div>
+    <h1>You have been logged out</h1>
+    <p>Thank you for using Local Service Finder.<br>Click below to login again.</p>
+    <button onclick="location.href='provider-login.html'">Go to Register</button>
+  </div>
+
+</body>
+</html>

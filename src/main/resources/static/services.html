@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Services</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: #fff9e6;
+      color: #333;
+    }
+
+    .navbar {
+      background-color: #ffcc70;
+      display: flex;
+      justify-content: space-between;
+      padding: 15px 25px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .navbar strong {
+      font-size: 22px;
+      color: #333;
+    }
+
+    .navbar a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    .navbar a:hover {
+      color: #7a4e16;
+    }
+
+    h2 {
+      padding: 30px 20px 10px;
+      font-size: 28px;
+      text-align: center;
+      color: #444;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      padding: 20px 40px;
+    }
+
+    .card {
+      background-color: #fff4cc;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 1.4;
+      color: #4a4a4a;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+    .service-title {
+      font-weight: 700;
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .service-desc {
+      font-size: 16px;
+      margin-bottom: 12px;
+      color: #666;
+    }
+
+    .service-extra {
+      font-size: 14px;
+      color: #8a7d49;
+      font-style: italic;
+    }
+
+    @media (max-width: 500px) {
+      .navbar {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div><strong>Services</strong></div>
+    <div><a href="bookings.html">Home</a></div>
+  </div>
+
+  <h2>All Available Services</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="service-title">🔧 Plumber</div>
+      <div class="service-desc">Expert plumbing solutions including leak repairs, pipe installation, and maintenance to keep your water flow smooth and hassle-free.</div>
+      <div class="service-extra">Available 24/7 | Affordable rates | Trusted by hundreds</div>
+    </div>
+
+    <div class="card">
+      <div class="service-title">💡 Electrician</div>
+      <div class="service-desc">Certified electricians for wiring, lighting installation, troubleshooting electrical faults, and ensuring safety compliance in your home or office.</div>
+      <div class="service-extra">Safety guaranteed | Quick response time | Warranty on work</div>
+    </div>
+
+    <div class="card">
+      <div class="service-title">📚 Tutor</div>
+      <div class="service-desc">Personalized tutoring for Math, Science, and more. Experienced teachers help boost your confidence and academic performance.</div>
+      <div class="service-extra">Online & Offline options | Flexible timings | All grades covered</div>
+    </div>
+
+    <div class="card">
+      <div class="service-title">🧹 Cleaner</div>
+      <div class="service-desc">Professional cleaning services for homes, offices, and commercial spaces. We ensure spotless and hygienic environments tailored to your needs.</div>
+      <div class="service-extra">Eco-friendly products | Trained staff | Custom packages</div>
+    </div>
+
+    <div class="card">
+      <div class="service-title">🛠️ Mechanic</div>
+      <div class="service-desc">Reliable bike and car repair services including engine tuning, brake fixes, and regular maintenance to keep you safe on the road.</div>
+      <div class="service-extra">Mobile service available | Genuine parts | Affordable pricing</div>
+    </div>
+  </div>
+</body>
+</html>
+

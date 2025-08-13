@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Service Finder Map</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    #map { height: 100vh; width: 100%; }
+    body { margin: 0; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    const map = L.map('map').setView([22.5726, 88.3639], 13); // Initial view (Kolkata)
+
+    // Add tile layer (background map)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+    }).addTo(map);
+
+    // Show user's location
+    map.locate({ setView: true, maxZoom: 16 });
+
+    map.on('locationfound', function(e) {
+      L.marker(e.latlng).addTo(map).bindPopup("You are here").openPopup();
+    });
+
+    map.on('locationerror', function(e) {
+      alert("Location access denied.");
+    });
+
+    // Fetch and display nearby providers
+    fetch('/api/providers')
+      .then(res => res.json())
+      .then(providers => {
+        providers.forEach(p => {
+          L.marker([p.lat, p.lon]).addTo(map).bindPopup(p.type);
+        });
+      });
+  </script>
+</body>
+</html>
