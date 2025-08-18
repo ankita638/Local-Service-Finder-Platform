@@ -35,26 +35,12 @@ Monitor all services listed and bookings made on the platform.
 💻 Tech Stack
 Backend: Spring Boot, Java
 
-Build Tool: Maven / Gradle
-
-🚀 Getting Started
-Follow these steps to get the project up and running on your local machine.
+Build Tool: Maven 
 
 Prerequisites
 Java Development Kit (JDK) installed.
-
 Apache Maven or Gradle installed.
 
 An IDE that supports Spring Boot (e.g., IntelliJ IDEA, Eclipse, VS Code).
 
-Installation & Setup
-Download the Project
 
-Go to the GitHub repository.
-
-Click on Code and then Download ZIP.
-
-Extract the Folder
-
-
-Once the download is complete, extract the ZIP file to your preferred directory.
